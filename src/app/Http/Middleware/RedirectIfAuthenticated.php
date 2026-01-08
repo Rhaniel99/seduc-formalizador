@@ -20,7 +20,7 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 // Redireciona para a rota 'lukisa.index'
-                return to_route('lukisa.index');
+                return to_route('user.index');
             }
         }
 

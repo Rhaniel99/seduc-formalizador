@@ -6,7 +6,7 @@ import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import GuestLayout from "@/Layouts/GuestLayout";
-import AuthLayout from "@/Layouts/Auth/Index";
+import FullscreenLayout from "./Layouts/FullscreenLayout";
 
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
@@ -40,7 +40,7 @@ createInertiaApp({
                 //     break;
                 default:
                     page.default.layout = (pageEl: React.ReactNode) => (
-                        <AuthLayout>{pageEl}</AuthLayout>
+                        <FullscreenLayout>{pageEl}</FullscreenLayout>
                     );
             }
         }
