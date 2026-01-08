@@ -1,0 +1,246 @@
+/* 1) Fonte global */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* 2) Motor do Tailwind (base + components + utilities) */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* 3) Onde o Tailwind vai buscar seu código para gerar classes */
+@source "../js/**/*.{js,ts,jsx,tsx}";
+@source "../views/**/*.blade.php";
+
+/* 4) Variante de dark mode via classe `.dark` */
+@custom-variant dark (&:is(.dark *));
+
+/* 5) Tokens de design e paleta de cores como CSS variables */
+@theme {
+    /* Cores Lukisa */
+    --color-lukisa-dark: #0D0000;
+    --color-lukisa-cream: #BFBAA8;
+    --color-lukisa-sage: #737065;
+    --color-lukisa-brown: #403E34;
+    --color-lukisa-light: #D9D7C5;
+
+    --background: 240 10% 3.9%; /* Fundo escuro como padrão, ajuste se preferir claro */
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --radius: 0.5rem;
+}
+
+/* 6) Estilos base (base layer) */
+@layer base {
+  :root {
+    /* Define as cores Lukisa para o tema claro */
+    --background: 48 33% 94%; /* lukisa-light */
+    --foreground: 45 10% 25%; /* lukisa-brown */
+    --card: 0 0% 100%;
+    --card-foreground: 45 10% 25%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 45 10% 25%;
+    --primary: 44 11% 41%; /* lukisa-sage */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 48 33% 94%;
+    --secondary-foreground: 44 11% 41%;
+    --muted: 50 12% 85%;
+    --muted-foreground: 45 10% 25%;
+    --accent: 50 12% 85%;
+    --accent-foreground: 44 11% 41%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 49 14% 72%; /* lukisa-cream */
+    --input: 49 14% 72%;
+    --ring: 44 11% 41%;
+  }
+
+  * {
+    border-color: var(--color-lukisa-cream);
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-lukisa-light);
+    color:            var(--color-lukisa-dark);
+  }
+}
+
+/* 7) Componentes customizados */
+@layer components {
+  /* Gradiente de fundo */
+  .lukisa-gradient {
+    background: linear-gradient(135deg, #d9d7c5 0%, #bfbaa8 50%, #737065 100%);
+  }
+}
+
+/* 8) Utilitários extras */
+@layer utilities {
+  /* Balanceamento de texto */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Animações básicas */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+  .animate-fade-out {
+    animation: fade-out 0.5s ease-in forwards;
+  }
+  .animate-slide-in-right {
+    animation: slide-in-right 0.6s ease-out forwards;
+  }
+  .animate-slide-in-left {
+    animation: slide-in-left 0.6s ease-out forwards;
+  }
+  .animate-bounce-in {
+    animation: bounce-in 0.8s ease-out forwards;
+  }
+
+  /* Foco acessível */
+  .focus-visible\:ring-sage:focus-visible {
+    @apply ring-2 ring-lukisa-sage ring-offset-2 outline-none;
+  }
+
+  /* Checkbox e radio custom */
+  input[type="checkbox"]:checked {
+    @apply bg-lukisa-sage border-lukisa-sage;
+  }
+  input[type="radio"]:checked {
+    @apply bg-lukisa-sage border-lukisa-sage;
+  }
+
+  /* Form focus */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    @apply border-lukisa-sage ring-2 ring-lukisa-sage/20 outline-none;
+  }
+
+  /* Scrollbar WebKit */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #d9d7c5;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #737065;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #403e34;
+  }
+
+  /* Loading spinner */
+  .spinner-lukisa {
+    @apply inline-block w-5 h-5 border-2 border-lukisa-light border-t-2 border-t-lukisa-sage rounded-full animate-spin;
+  }
+
+  /* Hover effects genéricos */
+  .btn-lukisa:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(115,112,101,0.3);
+  }
+  .card-lukisa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(115,112,101,0.15);
+  }
+
+  /* Responsividade de texto */
+  @media (max-width: 640px) {
+    .responsive-title {
+      @apply text-3xl;
+    }
+    .responsive-subtitle {
+      @apply text-lg;
+    }
+  }
+  @media (min-width: 641px) {
+    .responsive-title {
+      @apply text-5xl;
+    }
+    .responsive-subtitle {
+      @apply text-xl;
+    }
+  }
+
+  .card-lukisa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(115,112,101,0.15);
+  }
+
+  .animate-accordion-down {
+    animation: accordion-down 0.2s ease-out;
+  }
+  .animate-accordion-up {
+    animation: accordion-up 0.2s ease-out;
+  }
+}
+
+/* 9) Animações, keyframes, media queries, etc… */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(20px); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes bounce-in {
+  0%   { opacity: 0; transform: scale(0.3); }
+  50%  { opacity: 0.9; transform: scale(1.05); }
+  70%  { opacity: 1; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+@keyframes bounce-in {
+  0%   { opacity: 0; transform: scale(0.3); }
+  50%  { opacity: 0.9; transform: scale(1.05); }
+  70%  { opacity: 1; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* 10) Leaflet */
+.leaflet-container {
+    z-index: 1 !important;
+}
+
+.leaflet-pane,
+.leaflet-map-pane,
+.leaflet-tile-pane,
+.leaflet-marker-pane,
+.leaflet-overlay-pane {
+    z-index: 2 !important;
+}

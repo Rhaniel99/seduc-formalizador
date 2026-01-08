@@ -1,0 +1,167 @@
+networks:
+  shared_net:
+    name: shared_network
+    driver: bridge
+    external: true
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/16
+
+x-php-common: &php-common
+  build:
+    context: ./docker/php
+    dockerfile: Dockerfile
+    args:
+      - UID=${UID:-1000}
+      - GID=${GID:-1000}
+      - USER=${USER:-laravel}
+  user: "${UID}:${GID}"
+  volumes:
+    - ./src:/var/www/html:z
+    - .env:/var/www/html/.env
+  working_dir: /var/www/html
+  networks:
+    - default
+    - shared_net
+  restart: always
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+        - USER=${USER:-laravel}
+    restart: always
+    container_name: nginx_zero
+    ports:
+      - "8585:8000"
+    volumes:
+      - ./src:/var/www/html:z
+      - .env:/var/www/html/.env
+    depends_on:
+      php:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    networks:
+      - default
+
+  php:
+    <<: *php-common # Herda a configuração comum
+    container_name: php_zero
+    mem_limit: 768m
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./src:/var/www/html:z
+      - .env:/var/www/html/.env
+      - ./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+    # devices:
+      # - /dev/dri:/dev/dri
+
+  artisan:
+    <<: *php-common
+    container_name: artisan_zero
+    profiles: ["artisan"]
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./src:/var/www/html:z
+      - .env:/var/www/html/.env
+    entrypoint: ['php', 'artisan']
+    restart: "no"
+
+  composer:
+    <<: *php-common
+    container_name: composer_zero
+    profiles: ["composer"]
+    volumes:
+      - ./src:/var/www/html:z
+      - .env:/var/www/html/.env
+    entrypoint: ['composer']
+    restart: "no"
+
+  # reverb:
+  #   <<: *php-common
+  #   container_name: reverb_lukisa
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - ./src:/var/www/html:z
+  #     - .env:/var/www/html/.env
+  #   depends_on:
+  #     php:
+  #       condition: service_started
+  #     redis:
+  #       condition: service_healthy
+  #   command: php artisan reverb:start --host=0.0.0.0 --port=8080
+
+  # horizon:
+  #   <<: *php-common
+  #   container_name: horizon_lukisa
+  #   depends_on:
+  #     redis:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./src:/var/www/html:z
+  #     - .env:/var/www/html/.env
+  #   command: php artisan horizon
+  #   # devices:
+  #   #   - /dev/dri:/dev/dri
+
+  # scheduler:
+  #   <<: *php-common
+  #   container_name: scheduler_lukisa
+  #   depends_on:
+  #     redis:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./src:/var/www/html:z
+  #     - .env:/var/www/html/.env
+  #   command: php artisan schedule:work
+
+  node:
+    build:
+      context: ./docker/node
+      dockerfile: Dockerfile
+    container_name: node_zero
+    user: "${UID}:${GID}"
+    volumes:
+      - ./src:/var/www/html:z
+      - .env:/var/www/html/.env
+    ports:
+      - 3000:3000
+      - 3001:3001
+      - 5173:5173
+    working_dir: /var/www/html
+    profiles: ["node"]
+    networks:
+      - default
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis_zero
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    sysctls:
+      - net.core.somaxconn=1024
+    volumes:
+      - redis_data:/data
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  redis_data:
+    driver: local

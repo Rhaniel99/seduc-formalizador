@@ -1,0 +1,10 @@
+<?php
+
+namespace $CLASS_NAMESPACE$;
+
+use Modules\$STUDLY_NAME$\Interfaces\Repositories\I$CLASS$;
+
+class $CLASS$ implements I$CLASS$
+{
+    //
+}
