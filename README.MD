@@ -11,7 +11,7 @@
 
 ## Instalação
 
-Siga os passos abaixo para configurar o projeto AEMINA:
+Siga os passos abaixo para configurar o projeto:
 
 1. **Clone o repositório**
 ```bash
