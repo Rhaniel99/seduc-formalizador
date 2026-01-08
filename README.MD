@@ -1,6 +1,14 @@
 
 # Direto ao ponto
 
+## Tecnologias Utilizadas
+
+- **Inertia.js** (React) com **Tailwind CSS**
+- **Laravel**
+- **PostgreSQL**
+- **Redis**
+- **Docker** 
+
 ## Instalação
 
 Siga os passos abaixo para configurar o projeto AEMINA:
