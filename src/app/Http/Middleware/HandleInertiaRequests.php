@@ -4,11 +4,7 @@ namespace App\Http\Middleware;
 
 use Inertia\Middleware;
 use Illuminate\Http\Request;
-use Modules\Memories\DTOs\UserData;
 use Illuminate\Support\Facades\Session;
-use App\Inertia\NotificationsProps;
-use App\Inertia\SettingsUserProps;
-use App\Inertia\FriendshipsProps;
 
 
 class HandleInertiaRequests extends Middleware
@@ -24,27 +20,13 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             // Métodos privados para encapsular a lógica
-            'auth' => $this->getAuthProps($request),
+            // 'auth' => $this->getAuthProps($request),
             'flash' => $this->getFlashProps(),
-            'friendships' => fn() => FriendshipsProps::make($request),
-            'settings_user' => fn() => SettingsUserProps::make($request),
-            'notifications' => fn() => NotificationsProps::make($request),
+            // 'friendships' => fn() => FriendshipsProps::make($request),
+            // 'settings_user' => fn() => SettingsUserProps::make($request),
+            // 'notifications' => fn() => NotificationsProps::make($request),
 
         ]);
-    }
-
-    /**
-     * Retorna os dados básicos do usuário autenticado.
-     */
-    private function getAuthProps(Request $request): ?array
-    {
-        if (!$user = $request->user()) {
-            return null;
-        }
-
-        return [
-            'user' => UserData::from($user),
-        ];
     }
 
     /**
