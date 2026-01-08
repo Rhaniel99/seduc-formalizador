@@ -3,7 +3,7 @@
 
 ## Tecnologias Utilizadas
 
-- **Inertia.js** (React) com **Tailwind CSS**
+- **Inertia.js** (React | Typescript) com **Tailwind CSS**
 - **Laravel**
 - **PostgreSQL**
 - **Redis**
