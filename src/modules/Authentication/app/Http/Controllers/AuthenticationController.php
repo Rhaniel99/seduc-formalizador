@@ -22,15 +22,20 @@ class AuthenticationController extends Controller
 
     public function authLogin(LoginData $r)
     {
-        $success = $this->service->login($r);
+        $success = $this->service->loginByIdentifier(
+            $r->identifier,
+            $r->password,
+            $r->remember
+        );
 
-        if (!$success) {
+        if (! $success) {
             throw ValidationException::withMessages([
-                'email' => 'O e-mail ou a senha informados estão incorretos.',
+                'identifier' => 'O e-mail ou a matrícula informados estão incorretos.',
             ]);
         }
 
-        return to_route('lukisa.index')->with(['success' => "Seja bem vindo novamente!"]);
+        return to_route('dashboard.index')
+            ->with('success', 'Seja bem vindo!');
     }
 
     public function userRegister(RegisterData $r)

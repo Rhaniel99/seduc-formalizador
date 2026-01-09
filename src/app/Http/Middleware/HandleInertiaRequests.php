@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Inertia\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-
+use App\DTOs\AuthUserData;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -20,7 +20,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             // Métodos privados para encapsular a lógica
-            // 'auth' => $this->getAuthProps($request),
+            'auth' => $this->getAuthProps($request),
             'flash' => $this->getFlashProps(),
             // 'friendships' => fn() => FriendshipsProps::make($request),
             // 'settings_user' => fn() => SettingsUserProps::make($request),
@@ -47,5 +47,16 @@ class HandleInertiaRequests extends Middleware
         }
 
         return $flash;
+    }
+
+    private function getAuthProps(Request $request): ?array
+    {
+        if (!$user = $request->user()) {
+            return null;
+        }
+
+        return [
+            'user' => AuthUserData::from($user),
+        ];
     }
 }

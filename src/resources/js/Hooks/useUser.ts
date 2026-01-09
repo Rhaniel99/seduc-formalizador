@@ -1,7 +1,9 @@
+import { PageProps } from "@/Types/Inertia/PageProps";
 import { usePage, router } from "@inertiajs/react";
 
-export function useAuth() {
-    const { auth } = usePage().props as any;
+export function useUser() {
+    const { auth } = usePage<PageProps>().props;
+
     const user = auth?.user;
 
     const logout = () => router.post(route("auth.logout"));
@@ -11,6 +13,5 @@ export function useAuth() {
         logout,
         isLoggedIn: Boolean(user),
         id: user?.id,
-        username: user?.username,
     };
 }

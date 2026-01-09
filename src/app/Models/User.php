@@ -47,6 +47,11 @@ class User extends Authenticatable
      |  Helpers de perfil
      ======================= */
 
+    public function isDev(): bool
+    {
+        return $this->profile === 0;
+    }
+
     public function isManager(): bool
     {
         return $this->profile === 1;

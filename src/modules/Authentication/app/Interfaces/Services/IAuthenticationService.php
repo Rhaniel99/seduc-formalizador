@@ -21,4 +21,5 @@ interface IAuthenticationService
 
     public function resetPassword(ResetPasswordData $data): bool;
 
+    public function loginByIdentifier(string $identifier, string $password, bool $remember = false): bool;
 }

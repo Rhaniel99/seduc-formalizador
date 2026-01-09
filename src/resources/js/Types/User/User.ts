@@ -1,5 +1,10 @@
+export type UserRole = 'requisitante' | 'detin' | 'gestor' | 'dev';
+
 export interface User {
-  id: number;
-  username: string;
-  avatar_url?: string;
+  id: string;
+  name: string;
+  role: UserRole;
+  isDev?: boolean;
+  email?: string;
+  active?: boolean;
 }

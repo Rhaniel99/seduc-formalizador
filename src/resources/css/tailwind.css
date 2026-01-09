@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Onde o Tailwind deve escanear classes */
+@source "../js/**/*.{js,ts,jsx,tsx}";
+@source "../views/**/*.blade.php";

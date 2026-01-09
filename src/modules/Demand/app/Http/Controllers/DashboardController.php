@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class DemandController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('Auth/Demand/Index');
+        return Inertia::render('Auth/Dashboard/Index');
     }
 
     /**
@@ -21,7 +21,7 @@ class DemandController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Auth/Dashboard/requisitante/create');
+        return view('demand::create');
     }
 
     /**

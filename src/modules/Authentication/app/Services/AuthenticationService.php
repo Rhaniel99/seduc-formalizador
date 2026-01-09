@@ -56,4 +56,32 @@ class AuthenticationService implements IAuthenticationService
         );
     }
 
+    public function loginByIdentifier(
+        string $identifier,
+        string $password,
+        bool $remember = false
+    ): bool {
+        $identifier = trim($identifier);
+
+        if (filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+            $credentials = [
+                'email' => mb_strtolower($identifier),
+                'password' => $password,
+            ];
+        } else {
+            $credentials = [
+                'registration_number' => $identifier,
+                'password' => $password,
+            ];
+        }
+
+        if (! Auth::attempt($credentials, $remember)) {
+            return false;
+        }
+
+        // 🔐 segurança obrigatória
+        request()->session()->regenerate();
+
+        return true;
+    }
 }

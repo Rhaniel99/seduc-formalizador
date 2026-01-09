@@ -1,12 +1,12 @@
 import "../css/app.css";
 import "./bootstrap";
-import './echo';
-import "leaflet/dist/leaflet.css";
+// import './echo';
+// import "leaflet/dist/leaflet.css";
 import { createInertiaApp } from "@inertiajs/react";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import GuestLayout from "@/Layouts/GuestLayout";
-import FullscreenLayout from "./Layouts/FullscreenLayout";
+import SidebarLayout from "./Layouts/Sidebar/Index";
 
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
@@ -40,7 +40,7 @@ createInertiaApp({
                 //     break;
                 default:
                     page.default.layout = (pageEl: React.ReactNode) => (
-                        <FullscreenLayout>{pageEl}</FullscreenLayout>
+                        <SidebarLayout>{pageEl}</SidebarLayout>
                     );
             }
         }
