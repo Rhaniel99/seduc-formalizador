@@ -6,35 +6,35 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
+
             $table->string('name');
+
+            // matrícula institucional
+            $table->string('registration_number')->unique();
+
             $table->string('email')->unique();
             $table->string('password');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->rememberToken();
-            $table->timestamps();
-            $table->unique(['username', 'discriminator']);
-        });
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
+            $table->tinyInteger('profile')
+                ->default(2)
+                ->comment('1=gestor, 2=requisitante, 3=detin');
+
+            $table->boolean('active')->default(true);
+            $table->timestamp('last_login_at')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->index(['profile', 'active']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
     }
 };

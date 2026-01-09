@@ -1,0 +1,11 @@
+{
+    "name": "Demand",
+    "alias": "demand",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Demand\\Providers\\DemandServiceProvider"
+    ],
+    "files": []
+}
