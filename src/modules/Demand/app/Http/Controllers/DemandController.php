@@ -5,6 +5,7 @@ namespace Modules\Demand\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Modules\Demand\Data\CreateDemandData;
 
 class DemandController extends Controller
 {
@@ -27,7 +28,9 @@ class DemandController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(CreateDemandData $r) {
+        dd($request->all());
+    }
 
     /**
      * Show the specified resource.

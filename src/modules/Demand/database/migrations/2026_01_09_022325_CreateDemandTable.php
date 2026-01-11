@@ -12,20 +12,35 @@ return new class extends Migration {
 
             $table->uuid('created_by');
 
+            /* =======================
+            |  Dados do formulário
+            ======================= */
             $table->string('title')->nullable();
             $table->text('description')->nullable();
 
-            // classification (string for now, can be normalized later)
             $table->string('type')->nullable();
             $table->string('nature')->nullable();
             $table->string('technical_area')->nullable();
 
-            // 1=low | 2=medium | 3=high | 4=critical
             $table->tinyInteger('urgency_level')
                 ->default(2)
                 ->comment('1=baixa, 2=médio, 3=alta, 4=critico');
 
-            // 1=to_start | 2=in_progress | 3=completed | 4=archived | 5=sent_to_siged
+
+            /* =======================
+            |  Controle de rascunho
+            ======================= */
+            $table->boolean('is_draft')
+                ->default(true)
+                ->comment('true = rascunho editavel');
+
+            $table->tinyInteger('current_step')
+                ->default(1)
+                ->comment('step atual do formulario');
+
+            /* =======================
+            |  Status administrativo
+            ======================= */
             $table->tinyInteger('status')
                 ->default(1)
                 ->comment('1=a_iniciar, 2=em_andamento, 3=concluida, 4=arquivada, 5=encaminhada_siged');
@@ -35,12 +50,17 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
 
+
+            /* =======================
+            |  Relacionamentos
+            ======================= */
             $table->foreign('created_by')
                 ->references('id')
                 ->on('users')
                 ->restrictOnDelete();
 
             $table->index(['status', 'technical_area', 'urgency_level']);
+            $table->index(['created_by', 'is_draft']);
         });
     }
 

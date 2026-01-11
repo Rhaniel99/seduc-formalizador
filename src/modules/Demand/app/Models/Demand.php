@@ -26,6 +26,8 @@ class Demand extends BaseModel
         'urgency_level',
         'status',
         'is_document_generated',
+        'is_draft',
+        'current_step',
         'created_by',
     ];
 
@@ -33,6 +35,8 @@ class Demand extends BaseModel
         'urgency_level' => UrgencyLevel::class,
         'status' => DemandStatus::class,
         'is_document_generated' => 'boolean',
+        'is_draft' => 'boolean',
+        'current_step' => 'integer',
     ];
 
     /* =======================
@@ -59,14 +63,19 @@ class Demand extends BaseModel
         return $this->hasMany(DemandStatusHistory::class);
     }
 
-    public function responsibles()
+    public function responsibles(): HasMany
     {
         return $this->hasMany(DemandResponsible::class);
     }
 
     /* =======================
-     |  helpers
+     |  Helpers de domínio
      ======================= */
+
+    public function isDraft(): bool
+    {
+        return $this->is_draft === true;
+    }
 
     public function isCompleted(): bool
     {
@@ -78,8 +87,19 @@ class Demand extends BaseModel
         return $this->status === DemandStatus::ARCHIVED;
     }
 
+    /**
+     * RN05 – Imutabilidade após conclusão
+     */
     public function canBeEdited(): bool
     {
-        return ! $this->isCompleted() && ! $this->isArchived();
+        return $this->isDraft();
+    }
+
+    /**
+     * Usado pelo front para restaurar o step
+     */
+    public function getCurrentStep(): int
+    {
+        return $this->current_step ?? 1;
     }
 }

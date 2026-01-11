@@ -2,21 +2,13 @@ import { Head } from '@inertiajs/react'
 import { PageHeader } from '@/Pages/Auth/Dashboard/components/PageHeader'
 import { Stepper } from './components/Stepper'
 import { FormNavigation } from './components/FormNavigation'
-import { useDemandForm } from './hooks/useDemandForm'
 import { DEMAND_STEPS } from './steps/steps.config'
+import { useDemandForm } from './hooks/useDemandForm'
+import { useDemand } from './hooks/useDemand'
 
 export default function Index() {
-  const {
-    formData,
-    errors,
-    currentStep,
-    setCurrentStep,
-    updateField,
-    addResponsible,
-    removeResponsible,
-    updateResponsible,
-    validateStep,
-  } = useDemandForm()
+  const { currentStep, next, back } = useDemandForm()
+  const { form, validateAndSave, finalize } = useDemand()
 
   const stepConfig = DEMAND_STEPS.find(s => s.id === currentStep)!
   const StepComponent = stepConfig.Component
@@ -35,21 +27,41 @@ export default function Index() {
 
         <div className="bg-white rounded-lg border border-gray-200 p-8">
           <StepComponent
-            data={formData}
-            errors={errors}
-            onChange={updateField}
-            onAddResponsible={addResponsible}
-            onRemoveResponsible={removeResponsible}
-            onChangeResponsible={updateResponsible}
+            data={form.data}
+            errors={form.errors}
+            onChange={form.setData}
+            onAddResponsible={() =>
+              form.setData('responsibles', [
+                ...(form.data.responsibles ?? []),
+                { name: '', registrationNumber: '' },
+              ])
+            }
+            onRemoveResponsible={index =>
+              form.setData(
+                'responsibles',
+                form.data.responsibles?.filter((_, i) => i !== index)
+              )
+            }
+            onChangeResponsible={(i, field, value) =>
+              form.setData(
+                'responsibles',
+                form.data.responsibles?.map((r, idx) =>
+                  idx === i ? { ...r, [field]: value } : r
+                )
+              )
+            }
           />
 
           <FormNavigation
             currentStep={currentStep}
             totalSteps={DEMAND_STEPS.length}
-            onBack={() => setCurrentStep(s => s - 1)}
-            onNext={() => validateStep(currentStep) && setCurrentStep(s => s + 1)}
-            onSaveDraft={() => console.log('draft')}
-            onGenerate={() => console.log('generate')}
+            onBack={back}
+            onNext={() => {
+              const ok = validateAndSave(currentStep as 1 | 2 | 3)
+              if (ok) next()
+            }}
+            onSaveDraft={() => form.post(route('demands.store'))}
+            onGenerate={finalize}
           />
         </div>
       </div>
