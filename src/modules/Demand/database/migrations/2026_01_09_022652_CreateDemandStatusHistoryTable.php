@@ -12,8 +12,12 @@ return new class extends Migration {
 
             $table->uuid('demand_id');
 
-            $table->string('from_status')->nullable();
-            $table->string('to_status');
+            // enums int (alinhado com DemandStatus)
+            $table->tinyInteger('from_status')->nullable()
+                ->comment('DemandStatus enum value');
+
+            $table->tinyInteger('to_status')
+                ->comment('DemandStatus enum value');
 
             $table->uuid('changed_by')->nullable();
             $table->text('comment')->nullable();

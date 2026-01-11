@@ -3,8 +3,7 @@ import { useUser } from "@/Hooks/useUser";
 import { Link, usePage } from "@inertiajs/react";
 import { BarChart3, FilePlus, FileText, LayoutDashboard, LogOut, Settings, Users } from "lucide-react";
 import { PropsWithChildren } from "react";
-import { sidebarRoutes } from "./routes/Sidebar.routes";
-import { SidebarRouteKey } from './routes/Sidebar.routes';
+import { SidebarRouteKey, sidebarRoutes } from "@/Routes/sidebar.routes";
 
 type MenuItem = {
     id: SidebarRouteKey;
@@ -98,9 +97,11 @@ export default function SidebarLayout({ children }: PropsWithChildren) {
                     {menuItems.map((item) => {
                         const Icon = item.icon
                         // const href = route(item.id) // ajuste para suas rotas reais
-                        const href = sidebarRoutes[item.id]
+                        // const href = sidebarRoutes[item.id]
+                        const href = sidebarRoutes[item.id]()
 
-                        const isActive = url.startsWith(href)
+                        // const isActive = url.startsWith(href)
+                          const isActive = href !== '#' && url.startsWith(href)
 
                         return (
                             <Link

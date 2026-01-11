@@ -21,7 +21,7 @@ class DemandController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Auth/Dashboard/requisitante/create');
+        return Inertia::render('Auth/Demand/requisitante/create/index');
     }
 
     /**

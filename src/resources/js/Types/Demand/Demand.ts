@@ -37,13 +37,20 @@ export interface StatusChange {
 }
 
 export interface DemandFormData {
-  title: string;
-  requestingArea: string;
-  responsible: string;
-  responsibleMatricula: string;
-  type: DemandType;
-  nature: DemandNature;
-  technicalArea: TechnicalArea;
-  urgency: DemandUrgency;
-  description: string;
+  title: string
+  requestingArea: string
+
+  responsibles: DemandResponsibleForm[] // 👈 NOVO
+
+  type: string
+  nature: string
+  technicalArea: string
+  urgency: string
+  description: string
 }
+
+export interface DemandResponsibleForm {
+  name: string
+  registrationNumber: string
+}
+

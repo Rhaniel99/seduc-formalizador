@@ -59,6 +59,11 @@ class Demand extends BaseModel
         return $this->hasMany(DemandStatusHistory::class);
     }
 
+    public function responsibles()
+    {
+        return $this->hasMany(DemandResponsible::class);
+    }
+
     /* =======================
      |  helpers
      ======================= */

@@ -3,8 +3,8 @@ import { PageHeader } from '../components/PageHeader';
 import { DashboardCard } from '../components/DashboardCard';
 import { MOCK_DEMANDS } from '@/Data/mockData';
 import { useUser } from '@/Hooks/useUser';
-import { sidebarRoutes } from '@/Layouts/Sidebar/routes/Sidebar.routes';
 import { Head } from '@inertiajs/react';
+import { appRoutes } from '@/Routes/app.routes';
 
 export function DashboardRequisitante() {
   const { user } = useUser();
@@ -35,7 +35,7 @@ export function DashboardRequisitante() {
               description="Criar uma nova solicitação de TI"
               icon={FilePlus}
               iconColor="var(--institutional-blue)"
-              href={sidebarRoutes['gestao-demandas']}
+              href={appRoutes.demand.create()}
               className="border-2 border-blue-200"
             >
               <p className="text-sm text-gray-600 mt-2">
@@ -50,7 +50,7 @@ export function DashboardRequisitante() {
               value={myDemands.length}
               icon={FileText}
               iconColor="var(--institutional-blue)"
-              href={sidebarRoutes['gestao-demandas']}
+              href={appRoutes.demand.mine()}
             />
 
             {/* Card - Rascunhos */}
